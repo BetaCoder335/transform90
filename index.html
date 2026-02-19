@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>90 Day Transformation — Your Journey</title>
+<link rel="manifest" href="./manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Transform">
+<meta name="theme-color" content="#ff5c1a">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0b;
+    --surface: #111113;
+    --card: #18181c;
+    --border: #2a2a30;
+    --accent: #ff5c1a;
+    --accent2: #ffb347;
+    --green: #22c55e;
+    --blue: #3b82f6;
+    --text: #f0f0f2;
+    --muted: #6b6b7a;
+    --soft: #2a2a30;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 999; opacity: 0.4;
+  }
+
+  /* HEADER */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,10,11,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  nav { display: flex; gap: 0.3rem; }
+  nav button {
+    background: none; border: none;
+    color: var(--muted); font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem; cursor: pointer;
+    padding: 0.4rem 0.9rem; border-radius: 6px;
+    transition: all 0.2s;
+  }
+  nav button:hover, nav button.active { background: var(--soft); color: var(--text); }
+  nav button.active { color: var(--accent); }
+
+  /* MAIN */
+  main { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* SECTION PAGES */
+  .page { display: none; animation: fadeIn 0.3s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* HERO STRIP */
+  .hero {
+    background: linear-gradient(135deg, #1a0a00 0%, var(--card) 60%);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; right: -60px; top: -60px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(255,92,26,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-grid { display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: center; }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; line-height: 1; letter-spacing: 2px; }
+  .hero h1 span { color: var(--accent); }
+  .hero p { color: var(--muted); margin-top: 0.5rem; font-size: 0.95rem; }
+  .day-badge {
+    text-align: center;
+    background: var(--accent);
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    min-width: 130px;
+  }
+  .day-badge .day-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem; line-height: 1;
+    color: #fff;
+  }
+  .day-badge .day-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.8); }
+
+  /* PROGRESS BAR */
+  .progress-wrap { margin-top: 1.5rem; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--muted); margin-bottom: 0.5rem; }
+  .progress-bar { height: 8px; background: var(--soft); border-radius: 99px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 99px; transition: width 0.5s ease; }
+
+  /* STATS GRID */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+  .stat-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.2rem 1.4rem;
+    transition: border-color 0.2s;
+  }
+  .stat-card:hover { border-color: var(--accent); }
+  .stat-card .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); font-weight: 600; }
+  .stat-card .value { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; margin-top: 0.2rem; line-height: 1; }
+  .stat-card .unit { font-size: 0.8rem; color: var(--muted); }
+  .stat-card .value.accent { color: var(--accent); }
+  .stat-card .value.green { color: var(--green); }
+  .stat-card .value.blue { color: var(--blue); }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem; letter-spacing: 1px;
+    margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .card-title .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+
+  /* TWO COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  @media(max-width: 700px) { .two-col { grid-template-columns: 1fr; } .hero-grid { grid-template-columns: 1fr; } }
+
+  /* MACRO RINGS */
+  .macro-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .macro-item { flex: 1; min-width: 80px; text-align: center; }
+  .macro-ring {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem; font-weight: 600;
+    position: relative;
+  }
+  .macro-ring::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    padding: 3px;
+    background: conic-gradient(var(--c) calc(var(--pct) * 1%), var(--soft) 0%);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #fff calc(100% - 5px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #fff calc(100% - 5px));
+  }
+  .macro-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+  /* MEAL TIMELINE */
+  .meal-time { display: flex; gap: 1rem; margin-bottom: 1.2rem; align-items: flex-start; }
+  .meal-time:last-child { margin-bottom: 0; }
+  .time-badge {
+    background: var(--soft); border-radius: 8px;
+    padding: 0.4rem 0.7rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem; color: var(--accent);
+    white-space: nowrap; min-width: 80px; text-align: center;
+  }
+  .meal-info { flex: 1; }
+  .meal-name { font-weight: 600; font-size: 0.95rem; }
+  .meal-items { color: var(--muted); font-size: 0.82rem; margin-top: 0.2rem; line-height: 1.5; }
+  .meal-cals {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem; color: var(--accent2);
+    margin-top: 0.3rem;
+  }
+
+  /* WORKOUT */
+  .workout-day-tabs { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+  .wd-tab {
+    padding: 0.4rem 1rem; border-radius: 8px;
+    background: var(--soft); border: 1px solid var(--border);
+    cursor: pointer; font-size: 0.8rem; font-weight: 500;
+    transition: all 0.2s; color: var(--muted);
+  }
+  .wd-tab:hover { color: var(--text); }
+  .wd-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .wd-tab.rest { background: var(--surface); color: var(--muted); cursor: default; }
+
+  .exercise-list { display: flex; flex-direction: column; gap: 0.7rem; }
+  .exercise-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 0.9rem 1.1rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .ex-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem; color: var(--accent);
+    min-width: 24px;
+  }
+  .ex-info { flex: 1; }
+  .ex-name { font-weight: 600; font-size: 0.92rem; }
+  .ex-detail { font-size: 0.78rem; color: var(--muted); margin-top: 0.1rem; }
+  .ex-sets {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem; color: var(--accent2);
+    white-space: nowrap;
+  }
+
+  /* DONE CHECKBOX */
+  .ex-check { width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+  .ex-check.done { background: var(--green); border-color: var(--green); }
+  .ex-check.done::after { content: '✓'; font-size: 11px; color: #fff; font-weight: 700; }
+
+  /* TRACKER INPUT */
+  .tracker-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.8rem; }
+  .tracker-input-wrap label { display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 0.4rem; }
+  .tracker-input-wrap input {
+    width: 100%; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 0.6rem 0.8rem;
+    color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 1rem;
+    outline: none; transition: border-color 0.2s;
+  }
+  .tracker-input-wrap input:focus { border-color: var(--accent); }
+
+  /* BTN */
+  .btn {
+    background: var(--accent); color: #fff;
+    border: none; border-radius: 10px;
+    padding: 0.7rem 1.5rem; font-family: 'DM Sans', sans-serif;
+    font-weight: 600; font-size: 0.9rem; cursor: pointer;
+    transition: all 0.2s; margin-top: 1rem;
+  }
+  .btn:hover { background: #ff7040; transform: translateY(-1px); }
+  .btn-sm { padding: 0.4rem 1rem; font-size: 0.82rem; margin-top: 0; }
+  .btn-ghost { background: var(--soft); color: var(--text); }
+  .btn-ghost:hover { background: var(--border); }
+
+  /* CALORIE METER */
+  .cal-meter {
+    background: var(--surface); border-radius: 12px;
+    padding: 1.2rem; margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 1.5rem;
+  }
+  .cal-circle {
+    position: relative; width: 90px; height: 90px; flex-shrink: 0;
+  }
+  .cal-circle svg { transform: rotate(-90deg); }
+  .cal-circle .center-text {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+  }
+  .cal-circle .center-num { font-size: 1.5rem; line-height: 1; color: var(--accent); }
+  .cal-circle .center-sub { font-size: 0.55rem; color: var(--muted); letter-spacing: 1px; }
+  .cal-breakdown { flex: 1; }
+  .cal-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; font-size: 0.82rem; }
+  .cal-row .cal-bar { flex: 1; height: 4px; background: var(--soft); border-radius: 99px; margin: 0 0.8rem; overflow: hidden; }
+  .cal-row .cal-bar-fill { height: 100%; border-radius: 99px; transition: width 0.4s; }
+
+  /* CALENDAR */
+  .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .cal-header { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 4px; }
+  .cal-header span { text-align: center; font-size: 0.7rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; padding: 0.3rem; }
+  .cal-day {
+    aspect-ratio: 1; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
+    border: 1px solid transparent;
+    position: relative;
+  }
+  .cal-day.rest { background: var(--surface); color: var(--muted); }
+  .cal-day.workout { background: rgba(255,92,26,0.12); color: var(--accent); border-color: rgba(255,92,26,0.2); }
+  .cal-day.done { background: rgba(34,197,94,0.15); color: var(--green); border-color: rgba(34,197,94,0.3); }
+  .cal-day.today { border-color: var(--accent) !important; box-shadow: 0 0 0 2px rgba(255,92,26,0.3); }
+  .cal-day:hover { transform: scale(1.1); }
+  .cal-day.future { opacity: 0.4; cursor: default; }
+  .cal-day.future:hover { transform: none; }
+
+  /* WEIGHT LOG */
+  .weight-entries { max-height: 300px; overflow-y: auto; }
+  .weight-entry {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.7rem 0; border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+  }
+  .weight-entry:last-child { border-bottom: none; }
+  .weight-val { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--text); }
+  .weight-delta { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; }
+  .delta-down { color: var(--green); }
+  .delta-up { color: #ef4444; }
+
+  /* TIPS SECTION */
+  .tip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+  .tip-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.2rem;
+  }
+  .tip-icon { font-size: 1.5rem; margin-bottom: 0.6rem; }
+  .tip-card h4 { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; }
+  .tip-card p { color: var(--muted); font-size: 0.8rem; line-height: 1.6; }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 2rem; right: 2rem;
+    background: var(--green); color: #fff;
+    padding: 0.8rem 1.5rem; border-radius: 10px;
+    font-weight: 600; font-size: 0.85rem;
+    transform: translateY(100px); opacity: 0;
+    transition: all 0.3s; z-index: 1000;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--soft); border-radius: 3px; }
+
+  /* PHASE BADGE */
+  .phase-tag {
+    display: inline-block;
+    font-size: 0.72rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    padding: 0.25rem 0.6rem; border-radius: 5px;
+    margin-left: 0.5rem;
+  }
+  .phase-1 { background: rgba(59,130,246,0.2); color: var(--blue); }
+  .phase-2 { background: rgba(255,92,26,0.2); color: var(--accent); }
+  .phase-3 { background: rgba(34,197,94,0.2); color: var(--green); }
+
+  /* INFO BOX */
+  .info-box {
+    background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 10px; padding: 1rem 1.2rem;
+    font-size: 0.83rem; color: #93c5fd; line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+  .warning-box {
+    background: rgba(255,92,26,0.08); border: 1px solid rgba(255,92,26,0.2);
+    border-radius: 10px; padding: 1rem 1.2rem;
+    font-size: 0.83rem; color: #fdba74; line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+
+  /* CHART MINI */
+  .mini-chart { width: 100%; height: 80px; margin-top: 0.8rem; }
+  .chart-bars { display: flex; align-items: flex-end; gap: 3px; height: 60px; }
+  .chart-bar { flex: 1; background: rgba(255,92,26,0.3); border-radius: 3px 3px 0 0; min-height: 4px; transition: background 0.2s; }
+  .chart-bar:hover { background: var(--accent); }
+  .chart-bar.green { background: rgba(34,197,94,0.4); }
+  .chart-bar.green:hover { background: var(--green); }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🔥 TRANSFORM</div>
+  <nav>
+    <button class="active" onclick="showPage('dashboard')">Dashboard</button>
+    <button onclick="showPage('meals')">Meals</button>
+    <button onclick="showPage('workout')">Workout</button>
+    <button onclick="showPage('tracker')">Tracker</button>
+    <button onclick="showPage('plan')">90-Day Plan</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- DASHBOARD -->
+  <div class="page active" id="page-dashboard">
+
+    <div class="hero">
+      <div class="hero-grid">
+        <div>
+          <p style="color:var(--muted);font-size:0.8rem;text-transform:uppercase;letter-spacing:2px;margin-bottom:0.4rem">Your 90-Day Mission</p>
+          <h1>133KG → <span>113KG</span></h1>
+          <p>5'10" · 1,300 kcal/day · No Legs Split · 10K Steps Daily</p>
+          <div class="progress-wrap">
+            <div class="progress-label">
+              <span id="progress-label-left">Day 1 of 90</span>
+              <span id="progress-pct">0%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+          </div>
+        </div>
+        <div class="day-badge">
+          <div class="day-num" id="current-day-num">1</div>
+          <div class="day-label">Day of 90</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="label">Start Weight</div>
+        <div class="value">133 <span class="unit">kg</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Target Weight</div>
+        <div class="value accent">113 <span class="unit">kg</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Current Weight</div>
+        <div class="value" id="stat-current-weight">133 <span class="unit">kg</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Total Lost</div>
+        <div class="value green" id="stat-lost">0 <span class="unit">kg</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Daily Deficit</div>
+        <div class="value blue">~1800 <span class="unit">kcal</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Cal Limit</div>
+        <div class="value accent">1300 <span class="unit">kcal</span></div>
+      </div>
+    </div>
+
+    <!-- TODAY SNAPSHOT -->
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title"><div class="dot"></div> Today's Calories</div>
+        <div class="cal-meter">
+          <div class="cal-circle">
+            <svg width="90" height="90" viewBox="0 0 90 90">
+              <circle cx="45" cy="45" r="38" fill="none" stroke="var(--soft)" stroke-width="8"/>
+              <circle cx="45" cy="45" r="38" fill="none" stroke="var(--accent)" stroke-width="8"
+                stroke-dasharray="238.76" stroke-dashoffset="238.76"
+                id="cal-ring" stroke-linecap="round" style="transition:stroke-dashoffset 0.5s"/>
+            </svg>
+            <div class="center-text">
+              <div class="center-num" id="cal-consumed">0</div>
+              <div class="center-sub">/ 1300</div>
+            </div>
+          </div>
+          <div class="cal-breakdown">
+            <div class="cal-row">
+              <span style="color:#ef4444">Protein</span>
+              <div class="cal-bar"><div class="cal-bar-fill" id="p-bar" style="width:0%;background:#ef4444"></div></div>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem"><span id="p-val">0</span>/150g</span>
+            </div>
+            <div class="cal-row">
+              <span style="color:#3b82f6">Carbs</span>
+              <div class="cal-bar"><div class="cal-bar-fill" id="c-bar" style="width:0%;background:#3b82f6"></div></div>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem"><span id="c-val">0</span>/100g</span>
+            </div>
+            <div class="cal-row">
+              <span style="color:#eab308">Fat</span>
+              <div class="cal-bar"><div class="cal-bar-fill" id="f-bar" style="width:0%;background:#eab308"></div></div>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem"><span id="f-val">0</span>/33g</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-sm" onclick="showPage('tracker')">Log Today's Food →</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="dot"></div> Today's Workout</div>
+        <div id="today-workout-preview"></div>
+      </div>
+    </div>
+
+    <!-- TIPS -->
+    <div class="card">
+      <div class="card-title"><div class="dot"></div> Daily Reminders</div>
+      <div class="tip-grid">
+        <div class="tip-card">
+          <div class="tip-icon">💧</div>
+          <h4>Drink 3-4L Water</h4>
+          <p>Stay hydrated all day. Carry a water bottle to college. Water before meals reduces hunger.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">🚶</div>
+          <h4>10,000 Steps</h4>
+          <p>Walk between classes, take stairs. Evening walk after gym counts. Split across the day.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">🍱</div>
+          <h4>Meal Prep Sunday</h4>
+          <p>Prep your lunch boxes Sunday night. Keeps you on track and avoids canteen traps.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">😴</div>
+          <h4>Sleep 7-8 Hours</h4>
+          <p>Sleep is when you recover and burn fat. 10PM dinner → 11PM sleep keeps hormones balanced.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MEALS PAGE -->
+  <div class="page" id="page-meals">
+
+    <div class="card">
+      <div class="card-title"><div class="dot"></div> Your Daily Macro Targets</div>
+      <div class="warning-box">⚡ Your TDEE is ~2,900 kcal/day. At 1,300 kcal you create a ~1,600 kcal deficit + ~200 kcal from walking = ~1,800 kcal/day deficit. That's approximately 1.6–1.8 kg/week of fat loss — totally achievable in 90 days.</div>
+      <div class="macro-row">
+        <div class="macro-item">
+          <div class="macro-ring" style="--c:#ef4444;--pct:100">150g</div>
+          <div class="macro-label">Protein</div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:0.2rem">600 kcal</div>
+        </div>
+        <div class="macro-item">
+          <div class="macro-ring" style="--c:#3b82f6;--pct:100">100g</div>
+          <div class="macro-label">Carbs</div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:0.2rem">400 kcal</div>
+        </div>
+        <div class="macro-item">
+          <div class="macro-ring" style="--c:#eab308;--pct:100">33g</div>
+          <div class="macro-label">Fat</div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:0.2rem">300 kcal</div>
+        </div>
+        <div class="macro-item">
+          <div class="macro-ring" style="--c:#ff5c1a;--pct:100">1300</div>
+          <div class="macro-label">Calories</div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:0.2rem">daily max</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box">📌 No breakfast (you skip it). Lunch at 12:30 is your biggest meal. Light snack optional. Dinner at 9PM. Sunday is your rest day — eat the same meal plan but can add 100–200 extra calories if hungry.</div>
+
+    <!-- WEEKDAY MEAL PLAN -->
+    <div class="card">
+      <div class="card-title"><div class="dot"></div> Weekday Meal Plan (Mon–Sat)</div>
+
+      <div class="meal-time">
+        <div class="time-badge">7:30 AM</div>
+        <div class="meal-info">
+          <div class="meal-name">☕ Morning Start (at home / on way)</div>
+          <div class="meal-items">1 Black Coffee or Green Tea (no sugar) · Optional: 5 soaked almonds</div>
+          <div class="meal-cals">~30 kcal · P: 1g · C: 1g · F: 2g</div>
+        </div>
+      </div>
+
+      <div class="meal-time">
+        <div class="time-badge">12:30 PM</div>
+        <div class="meal-info">
+          <div class="meal-name">🍱 Lunch — College Break (MAIN MEAL)</div>
+          <div class="meal-items">
+            <strong>Option A (Dal-Rice day):</strong> 1 cup cooked dal (moong/masoor) + 150g cooked rice + 1 cup sabzi (any veg, no potato) + 1 cup low-fat curd<br>
+            <strong>Option B (Roti day):</strong> 2 rotis (whole wheat) + 1 cup dal or sabzi + 100g grilled paneer or chicken + 1 cup curd<br>
+            <strong>Option C (Canteen day):</strong> Grilled chicken sandwich (no mayo) + 1 boiled egg + 1 buttermilk<br>
+            <strong>Option D (Egg day):</strong> 3 boiled eggs + 1 whole wheat roti + 1 cup sabzi + 1 small curd
+          </div>
+          <div class="meal-cals">~600–650 kcal · P: 45–50g · C: 60–65g · F: 12–15g</div>
+        </div>
+      </div>
+
+      <div class="meal-time">
+        <div class="time-badge">4:00 PM</div>
+        <div class="meal-info">
+          <div class="meal-name">🥤 Afternoon Snack (Optional, if hungry)</div>
+          <div class="meal-items">1 scoop whey protein in water (if available) + 5 almonds<br>OR: 1 cup chana (boiled, with lemon + salt) OR: 1 banana + 2 boiled eggs (whites only)</div>
+          <div class="meal-cals">~150–180 kcal · P: 20–25g · C: 10g · F: 3g</div>
+        </div>
+      </div>
+
+      <div class="meal-time">
+        <div class="time-badge">Pre-Gym</div>
+        <div class="meal-info">
+          <div class="meal-name">⚡ Pre-Workout (8–8:15 PM, before gym)</div>
+          <div class="meal-items">1 black coffee (no sugar) + 4-5 rice cakes or 1 small banana<br>This gives you energy without killing your deficit</div>
+          <div class="meal-cals">~80–100 kcal · P: 1g · C: 20g · F: 0g</div>
+        </div>
+      </div>
+
+      <div class="meal-time">
+        <div class="time-badge">9:00 PM</div>
+        <div class="meal-info">
+          <div class="meal-name">🍽️ Dinner (Post-Gym, HIGH PROTEIN)</div>
+          <div class="meal-items">
+            <strong>Option A:</strong> 150g grilled chicken breast + 1 cup palak/mixed sabzi + 1 cup moong dal soup<br>
+            <strong>Option B:</strong> 4 egg whites + 1 whole egg omelette + 2 cups vegetable soup + 1 small whole wheat toast<br>
+            <strong>Option C:</strong> 150g fish (rohu/surmai, grilled) + 1 cup sabzi + 1 cup dal<br>
+            <strong>Option D (Veg):</strong> 150g paneer (low fat, bhurji style) + 1 cup sabzi + 1 roti + 1 cup curd<br>
+            <strong>Option E:</strong> 100g rajma/chole + 1 cup rice (small) + 1 cup curd
+          </div>
+          <div class="meal-cals">~480–520 kcal · P: 45–55g · C: 25–30g · F: 10–15g</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SUNDAY -->
+    <div class="card">
+      <div class="card-title"><div class="dot"></div> Sunday Meal Plan (Rest Day)</div>
+      <div class="info-box" style="margin-bottom:1rem">Sunday is your cheat-light day. You can add 100-200 extra calories. Still hit protein goals. No gym — but a 10K step walk is encouraged.</div>
+
+      <div class="meal-time">
+        <div class="time-badge">9:00 AM</div>
+        <div class="meal-info">
+          <div class="meal-name">🥚 Brunch (you can eat breakfast!)</div>
+          <div class="meal-items">3 egg omelette + 2 whole wheat toasts + 1 cup black coffee or milk (low fat)</div>
+          <div class="meal-cals">~350 kcal · P: 25g · C: 30g · F: 12g</div>
+        </div>
+      </div>
+
+      <div class="meal-time">
+        <div class="time-badge">1:30 PM</div>
+        <div class="meal-info">
+          <div class="meal-name">🍚 Lunch</div>
+          <div class="meal-items">1 cup cooked dal + 100g brown rice + 1 cup sabzi + 1 cup curd<br>OR: Grilled chicken rice bowl (150g chicken + 100g rice + salad)</div>
+          <div class="meal-cals">~500 kcal · P: 40g · C: 55g · F: 10g</div>
+        </div>
+      </div>
+
+      <div class="meal-time">
+        <div class="time-badge">4:00 PM</div>
+        <div class="meal-info">
+          <div class="meal-name">🍵 Snack</div>
+          <div class="meal-items">Green tea + 1 small fruit (apple/pear) + 5 almonds</div>
+          <div class="meal-cals">~120 kcal · P: 2g · C: 20g · F: 4g</div>
+        </div>
+      </div>
+
+      <div class="meal-time">
+        <div class="time-badge">8:00 PM</div>
+        <div class="meal-info">
+          <div class="meal-name">🌙 Dinner</div>
+          <div class="meal-items">100g grilled paneer OR 2 eggs + 1 cup soup + 1 roti + salad</div>
+          <div class="meal-cals">~380 kcal · P: 30g · C: 25g · F: 12g</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOODS TO AVOID -->
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title"><div class="dot"></div> ✅ Eat Freely</div>
+        <div style="font-size:0.83rem;line-height:2;color:var(--muted)">
+          All green vegetables (palak, broccoli, beans, lauki)<br>
+          Cucumber, tomato, onion, capsicum<br>
+          Moong dal, masoor dal, toor dal<br>
+          Egg whites, chicken breast, fish<br>
+          Low-fat curd / buttermilk<br>
+          Black coffee, green tea, water<br>
+          Cucumber raita, lemon water<br>
+          Boiled chana, sprouts
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="dot"></div> ❌ Strictly Avoid</div>
+        <div style="font-size:0.83rem;line-height:2;color:var(--muted)">
+          Fried food (samosa, vada, pakora)<br>
+          Cold drinks, juices, sugary chai<br>
+          Maida products (white bread, naan, puri)<br>
+          Full-fat milk / cheese in excess<br>
+          Chips, biscuits, sweets, mithai<br>
+          Restaurant curries (high oil)<br>
+          Late night snacking after dinner<br>
+          Alcohol (empty calories)
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- WORKOUT PAGE -->
+  <div class="page" id="page-workout">
+
+    <div class="card">
+      <div class="card-title"><div class="dot"></div> Your 6-Day Gym Split (No Legs)</div>
+      <div class="info-box">You train Mon–Sat, 1 hour per session (8–9 PM after college). Sunday is rest. No leg day — your 10K daily steps are your leg work. Every muscle gets hit twice a week for maximum fat burn + muscle retention.</div>
+
+      <div class="workout-day-tabs" id="workout-tabs">
+        <div class="wd-tab rest">MON · REST 🔒</div>
+        <div class="wd-tab active" onclick="showWorkout('tuesday')">TUE · Chest + Tri</div>
+        <div class="wd-tab" onclick="showWorkout('wednesday')">WED · Back + Bi</div>
+        <div class="wd-tab" onclick="showWorkout('thursday')">THU · Shoulder + Abs</div>
+        <div class="wd-tab" onclick="showWorkout('friday')">FRI · Chest + Tri</div>
+        <div class="wd-tab" onclick="showWorkout('saturday')">SAT · Back + Bi</div>
+        <div class="wd-tab" onclick="showWorkout('sunday')">SUN · Shoulder + Abs</div>
+      </div>
+
+      <div id="workout-display"></div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title"><div class="dot"></div> Cardio Protocol</div>
+        <div style="font-size:0.85rem;line-height:1.8;color:var(--muted)">
+          <strong style="color:var(--text)">During Gym (end of session):</strong><br>
+          10–15 min incline treadmill walk OR rowing machine<br><br>
+          <strong style="color:var(--text)">Outside Gym:</strong><br>
+          Walk between college classes, stairs over elevator<br>
+          Evening walks if you fall short of 10K steps<br><br>
+          <strong style="color:var(--text)">Step Goal:</strong> 10,000 steps/day minimum<br>
+          Sunday: Long 45–60 min outdoor walk
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="dot"></div> Gym Tips</div>
+        <div style="font-size:0.85rem;line-height:1.8;color:var(--muted)">
+          <strong style="color:var(--text)">Rest Between Sets:</strong> 60–90 sec<br>
+          <strong style="color:var(--text)">Tempo:</strong> 2 sec down, 1 sec squeeze, 1 sec up<br>
+          <strong style="color:var(--text)">Warmup:</strong> 5 min light jog + arm circles<br>
+          <strong style="color:var(--text)">Progressive Overload:</strong> Add weight every 2 weeks<br>
+          <strong style="color:var(--text)">Failure:</strong> Go to failure on last set<br>
+          <strong style="color:var(--text)">No phone:</strong> Stay focused, finish in 50 min, save 10 min for cardio
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TRACKER PAGE -->
+  <div class="page" id="page-tracker">
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title"><div class="dot"></div> Log Today's Nutrition</div>
+        <div class="tracker-grid">
+          <div class="tracker-input-wrap">
+            <label>Calories (kcal)</label>
+            <input type="number" id="in-cals" placeholder="0" min="0" max="1300">
+          </div>
+          <div class="tracker-input-wrap">
+            <label>Protein (g)</label>
+            <input type="number" id="in-protein" placeholder="0" min="0" max="200">
+          </div>
+          <div class="tracker-input-wrap">
+            <label>Carbs (g)</label>
+            <input type="number" id="in-carbs" placeholder="0" min="0" max="200">
+          </div>
+          <div class="tracker-input-wrap">
+            <label>Fat (g)</label>
+            <input type="number" id="in-fat" placeholder="0" min="0" max="100">
+          </div>
+          <div class="tracker-input-wrap">
+            <label>Steps</label>
+            <input type="number" id="in-steps" placeholder="0" min="0" max="30000">
+          </div>
+          <div class="tracker-input-wrap">
+            <label>Water (glasses)</label>
+            <input type="number" id="in-water" placeholder="0" min="0" max="20">
+          </div>
+        </div>
+        <button class="btn" onclick="saveToday()">Save Today's Log</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="dot"></div> Weight Check-In</div>
+        <div class="info-box" style="margin-bottom:1rem">Weigh yourself every Monday morning, after waking up, before eating/drinking. Same conditions each time for accuracy.</div>
+        <div class="tracker-input-wrap">
+          <label>Today's Weight (kg)</label>
+          <input type="number" id="in-weight" placeholder="133.0" step="0.1" min="80" max="200">
+        </div>
+        <button class="btn" onclick="saveWeight()" style="margin-top:1rem">Log Weight</button>
+
+        <div style="margin-top:1.5rem">
+          <div class="card-title" style="font-size:1rem;margin-bottom:0.8rem"><div class="dot"></div> Weight History</div>
+          <div class="weight-entries" id="weight-history"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 DAY LOG -->
+    <div class="card">
+      <div class="card-title"><div class="dot"></div> Recent Days Log</div>
+      <div id="recent-log" style="font-size:0.83rem;color:var(--muted)">No entries yet. Start logging!</div>
+    </div>
+
+  </div>
+
+  <!-- 90 DAY PLAN -->
+  <div class="page" id="page-plan">
+
+    <div class="card">
+      <div class="card-title"><div class="dot"></div> 90-Day Journey Calendar</div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;font-size:0.78rem">
+        <span>🟧 Workout Day</span>
+        <span>🟩 Completed</span>
+        <span>⬛ Rest Day (Sunday)</span>
+        <span style="border:1px solid var(--accent);border-radius:4px;padding:0 4px">Today</span>
+      </div>
+      <div class="cal-header">
+        <span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span><span>SUN</span>
+      </div>
+      <div class="calendar-grid" id="calendar-grid"></div>
+    </div>
+
+    <!-- PHASES -->
+    <div class="card">
+      <div class="card-title"><div class="dot"></div> 3-Phase Approach</div>
+      <div class="tip-grid">
+        <div class="tip-card" style="border-color:rgba(59,130,246,0.3)">
+          <div class="tip-icon">🏗️</div>
+          <h4>Phase 1: Foundation <span class="phase-tag phase-1">Day 1–30</span></h4>
+          <p>Learn the routine. Build the habit. Focus on form, not weight. Hit 10K steps daily. Expected loss: 6–8 kg in this phase.</p>
+        </div>
+        <div class="tip-card" style="border-color:rgba(255,92,26,0.3)">
+          <div class="tip-icon">🔥</div>
+          <h4>Phase 2: Intensity <span class="phase-tag phase-2">Day 31–60</span></h4>
+          <p>Increase workout weight. Tighten the diet. Add supersets. You'll see visible changes. Expected loss: additional 8–9 kg.</p>
+        </div>
+        <div class="tip-card" style="border-color:rgba(34,197,94,0.3)">
+          <div class="tip-icon">⚡</div>
+          <h4>Phase 3: Peak <span class="phase-tag phase-3">Day 61–90</span></h4>
+          <p>You're in the groove. Push hardest here. Body is adapting — fight through it. Expected loss: additional 5–7 kg. Total: ~20+ kg.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEKLY SCHEDULE TABLE -->
+    <div class="card">
+      <div class="card-title"><div class="dot"></div> Weekly Schedule at a Glance</div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:0.82rem">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border)">
+              <th style="text-align:left;padding:0.6rem;color:var(--muted);font-weight:600">Day</th>
+              <th style="text-align:left;padding:0.6rem;color:var(--muted);font-weight:600">Gym Focus</th>
+              <th style="text-align:left;padding:0.6rem;color:var(--muted);font-weight:600">Calories</th>
+              <th style="text-align:left;padding:0.6rem;color:var(--muted);font-weight:600">Cardio</th>
+              <th style="text-align:left;padding:0.6rem;color:var(--muted);font-weight:600">Notes</th>
+            </tr>
+          </thead>
+          <tbody id="schedule-table"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<div class="toast" id="toast">✓ Saved!</div>
+
+<!-- INSTALL BANNER -->
+<div id="install-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:linear-gradient(135deg,#1a0800,#1e1008);border-top:1px solid var(--accent);padding:1rem 1.5rem;align-items:center;gap:1rem;box-shadow:0 -8px 32px rgba(0,0,0,0.5)">
+  <div style="font-size:1.6rem">🔥</div>
+  <div style="flex:1">
+    <div style="font-weight:700;font-size:0.9rem">Install Transform App</div>
+    <div style="font-size:0.75rem;color:var(--muted);margin-top:0.1rem">Works offline · Saves all your data</div>
+  </div>
+  <button id="install-btn" class="btn" style="margin-top:0;padding:0.5rem 1.2rem;font-size:0.82rem">Install</button>
+  <button id="dismiss-install" style="background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;padding:0.2rem">✕</button>
+</div>
+
+<script>
+// ═══════════════ DATA ═══════════════
+const WORKOUT_DATA = {
+  monday: null, // GYM CLOSED — REST DAY
+  tuesday: {
+    name: 'Chest + Triceps',
+    emoji: '💪',
+    focus: 'Volume · Push Day 1',
+    exercises: [
+      { name: 'Flat Barbell Bench Press', sets: '4 × 10', muscle: 'Mid Chest', tip: 'Control the descent, explode up' },
+      { name: 'Incline Dumbbell Press', sets: '3 × 12', muscle: 'Upper Chest', tip: 'Elbows at 45°, squeeze at top' },
+      { name: 'Cable Chest Flyes', sets: '3 × 15', muscle: 'Chest Stretch', tip: 'Arms slightly bent, slow and controlled' },
+      { name: 'Tricep Pushdown (Rope)', sets: '4 × 12', muscle: 'All Tricep Heads', tip: 'Elbows locked at sides' },
+      { name: 'Overhead Tricep Extension', sets: '3 × 12', muscle: 'Long Head Tricep', tip: 'Full stretch at bottom' },
+      { name: 'Incline Treadmill Walk / Cardio', sets: '12 min', muscle: 'Fat Burn', tip: '12% incline, 5.5 kmph' },
+    ]
+  },
+  wednesday: {
+    name: 'Back + Biceps',
+    emoji: '🏋️',
+    focus: 'Width & Thickness · Pull Day 1',
+    exercises: [
+      { name: 'Lat Pulldown (Wide Grip)', sets: '4 × 10', muscle: 'Lats Width', tip: 'Pull to chest, lean slightly back' },
+      { name: 'Seated Cable Row', sets: '4 × 10', muscle: 'Mid Back', tip: 'Chest to pad, squeeze shoulder blades' },
+      { name: 'Dumbbell Bent Over Row', sets: '3 × 12', muscle: 'Lats + Rhomboids', tip: 'Keep back flat, row to hip' },
+      { name: 'Face Pulls', sets: '3 × 15', muscle: 'Rear Delt / Rotator Cuff', tip: 'Pull to forehead, thumbs back' },
+      { name: 'Barbell Curl', sets: '3 × 12', muscle: 'Bicep Peak', tip: 'No swinging, slow negative' },
+      { name: 'Hammer Curl', sets: '3 × 12', muscle: 'Brachialis + Forearm', tip: 'Neutral grip, all the way up' },
+      { name: 'Treadmill / Rowing Machine', sets: '10 min', muscle: 'Cardio', tip: 'Moderate pace' },
+    ]
+  },
+  thursday: {
+    name: 'Shoulders + Abs',
+    emoji: '🎯',
+    focus: 'Delt Development · Core',
+    exercises: [
+      { name: 'Dumbbell Shoulder Press', sets: '4 × 10', muscle: 'All Delt Heads', tip: 'Don\'t lock out at top' },
+      { name: 'Lateral Raises', sets: '4 × 15', muscle: 'Side Delts (WIDTH)', tip: 'Slight bend in elbow, lead with elbows' },
+      { name: 'Front Raises (Plate)', sets: '3 × 12', muscle: 'Front Delt', tip: 'Don\'t use momentum' },
+      { name: 'Rear Delt Dumbbell Fly', sets: '3 × 15', muscle: 'Rear Delt', tip: 'Hinged at hips, arms out wide' },
+      { name: 'Cable Crunch', sets: '4 × 20', muscle: 'Upper Abs', tip: 'Crunch your ribs to hips' },
+      { name: 'Hanging Leg Raises', sets: '3 × 15', muscle: 'Lower Abs', tip: 'Slow down, no swinging' },
+      { name: 'Plank', sets: '3 × 45sec', muscle: 'Core Stability', tip: 'Squeeze everything, breathe' },
+    ]
+  },
+  friday: {
+    name: 'Chest + Triceps (Heavy)',
+    emoji: '🔥',
+    focus: 'Strength · Push Day 2',
+    exercises: [
+      { name: 'Dumbbell Flat Press', sets: '4 × 10', muscle: 'Full Chest', tip: 'Heavier than Tuesday — progressive overload' },
+      { name: 'Decline Bench Press', sets: '3 × 10', muscle: 'Lower Chest', tip: 'Great for lower chest definition' },
+      { name: 'Chest Dips (Assisted if needed)', sets: '3 × 12', muscle: 'Chest + Tricep', tip: 'Lean forward for chest emphasis' },
+      { name: 'Pec Deck / Chest Machine', sets: '3 × 15', muscle: 'Isolation', tip: 'Squeeze hard at center' },
+      { name: 'Close Grip Bench Press', sets: '3 × 10', muscle: 'Tricep Mass', tip: 'Elbows tucked, controlled' },
+      { name: 'Skull Crushers', sets: '3 × 12', muscle: 'Tricep Long Head', tip: 'Barbell or EZ Bar, careful on descent' },
+      { name: 'Cardio', sets: '10 min', muscle: 'Fat Burn', tip: 'Steady state or intervals' },
+    ]
+  },
+  saturday: {
+    name: 'Back + Biceps (Heavy)',
+    emoji: '💥',
+    focus: 'Thickness · Pull Day 2',
+    exercises: [
+      { name: 'Deadlift (Romanian)', sets: '4 × 8', muscle: 'Lower Back + Hamstrings', tip: 'Hip hinge movement, bar close to shins' },
+      { name: 'T-Bar Row / Machine Row', sets: '4 × 10', muscle: 'Thick Back', tip: 'Heavy weight, controlled' },
+      { name: 'Pull-Ups / Assisted Pull-Ups', sets: '3 × max', muscle: 'Lats + Biceps', tip: 'Full dead hang to chin over bar' },
+      { name: 'Single Arm DB Row', sets: '3 × 12 each', muscle: 'Unilateral Lats', tip: 'Brace on bench, heavy weight' },
+      { name: 'Incline Dumbbell Curl', sets: '3 × 12', muscle: 'Bicep Stretch', tip: 'Full stretch at bottom, best for peak' },
+      { name: 'Concentration Curl', sets: '3 × 12 each', muscle: 'Bicep Isolation', tip: 'Focus on squeeze at top' },
+      { name: 'Abs Circuit', sets: '3 rounds', muscle: 'Core Finisher', tip: 'Crunches + Leg raises + Russian twists, 30 sec each' },
+      { name: 'Cardio Finisher', sets: '12 min', muscle: 'Maximum Fat Burn', tip: 'End the week strong' },
+    ]
+  },
+  sunday: {
+    name: 'Shoulders + Abs (Burnout)',
+    emoji: '⚡',
+    focus: 'Endurance · High Volume · Week Finisher',
+    exercises: [
+      { name: 'Arnold Press', sets: '4 × 12', muscle: 'All Delt Heads', tip: 'Rotate as you press up' },
+      { name: 'Machine Shoulder Press', sets: '3 × 15', muscle: 'Front + Side Delt', tip: 'Go heavy, controlled' },
+      { name: 'Lateral Raise Drop Set', sets: '3 × 20-15-10', muscle: 'Side Delts', tip: 'No rest between drop sets!' },
+      { name: 'Cable Lateral Raise', sets: '3 × 15 each', muscle: 'Side Delt Isolation', tip: 'One arm at a time, cable at low pulley' },
+      { name: 'Hanging Leg Raises', sets: '3 × 15', muscle: 'Lower Abs', tip: 'Slow and controlled, no swinging' },
+      { name: 'Cable Crunch', sets: '4 × 20', muscle: 'Upper Abs', tip: 'Crunch ribs to hips' },
+      { name: 'Oblique Cable Crunch', sets: '3 × 15 each', muscle: 'Obliques', tip: 'Pull elbow to opposite knee' },
+      { name: 'Plank Hold', sets: '3 × 60sec', muscle: 'Core Stability', tip: 'Squeeze everything, breathe through it' },
+      { name: 'Cardio Finisher', sets: '15 min', muscle: 'Maximum Fat Burn', tip: 'Go hard — it\'s the last session of the week!' },
+    ]
+  }
+};
+
+const SCHEDULE = [
+  { day: 'Monday', gym: '— REST (Gym Closed) 🔒', cals: '1,300', cardio: '10K Steps + outdoor walk', notes: 'Light day — meal prep, recover' },
+  { day: 'Tuesday', gym: 'Chest + Triceps', cals: '1,300', cardio: '10K Steps + 12min treadmill', notes: 'Big lunch, high protein dinner' },
+  { day: 'Wednesday', gym: 'Back + Biceps', cals: '1,300', cardio: '10K Steps + 10min rowing', notes: 'Pull movements, full back focus' },
+  { day: 'Thursday', gym: 'Shoulders + Abs', cals: '1,300', cardio: '10K Steps + 10min walk', notes: 'Core focus, lateral raises key' },
+  { day: 'Friday', gym: 'Chest + Triceps (Heavy)', cals: '1,300', cardio: '10K Steps + 10min cardio', notes: 'Go heavier than Tuesday' },
+  { day: 'Saturday', gym: 'Back + Biceps (Heavy)', cals: '1,300', cardio: '10K Steps + 12min finisher', notes: 'Deadlifts + abs circuit' },
+  { day: 'Sunday', gym: 'Shoulders + Abs (Burnout) ⚡', cals: '1,300', cardio: '10K Steps + 15min cardio', notes: 'Finish the week strong!' },
+];
+
+// ═══════════════ STATE ═══════════════
+let appData = JSON.parse(localStorage.getItem('transform90') || '{}');
+if (!appData.startDate) {
+  appData.startDate = new Date().toISOString().split('T')[0];
+  appData.weights = [];
+  appData.dailyLogs = {};
+  appData.completedDays = [];
+  saveData();
+}
+
+function saveData() {
+  localStorage.setItem('transform90', JSON.stringify(appData));
+}
+
+function getDayNumber() {
+  const start = new Date(appData.startDate);
+  const today = new Date();
+  const diff = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+  return Math.min(Math.max(diff + 1, 1), 90);
+}
+
+// ═══════════════ NAVIGATION ═══════════════
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  if (id === 'plan') buildCalendar();
+  if (id === 'workout') showWorkout('monday');
+  if (id === 'tracker') renderWeightHistory();
+}
+
+// ═══════════════ WORKOUT ═══════════════
+function showWorkout(day) {
+  const data = WORKOUT_DATA[day];
+  const el = document.getElementById('workout-display');
+  if (!data) {
+    el.innerHTML = `<div style="padding:2rem;text-align:center;color:var(--muted)">
+      <div style="font-size:2rem;margin-bottom:0.5rem">🔒</div>
+      <div style="font-weight:600;color:var(--text)">Gym Closed — Rest Day</div>
+      <div style="font-size:0.83rem;margin-top:0.4rem">Go for a long walk, hit 10K steps, recover well.</div>
+    </div>`;
+    return;
+  }
+  const days = ['tuesday','wednesday','thursday','friday','saturday','sunday'];
+  document.querySelectorAll('.wd-tab:not(.rest)').forEach(t => t.classList.remove('active'));
+  const idx = days.indexOf(day);
+  document.querySelectorAll('.wd-tab:not(.rest)')[idx]?.classList.add('active');
+
+  el.innerHTML = `
+    <div style="margin-bottom:1rem;display:flex;align-items:center;gap:0.8rem">
+      <span style="font-size:1.8rem">${data.emoji}</span>
+      <div>
+        <div style="font-weight:700;font-size:1rem">${data.name}</div>
+        <div style="font-size:0.78rem;color:var(--muted)">${data.focus}</div>
+      </div>
+    </div>
+    <div class="exercise-list">
+      ${data.exercises.map((ex, i) => `
+        <div class="exercise-item">
+          <div class="ex-check" onclick="this.classList.toggle('done')"></div>
+          <div class="ex-num">0${i+1}</div>
+          <div class="ex-info">
+            <div class="ex-name">${ex.name}</div>
+            <div class="ex-detail">${ex.muscle} · ${ex.tip}</div>
+          </div>
+          <div class="ex-sets">${ex.sets}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+// ═══════════════ TODAY WORKOUT PREVIEW ═══════════════
+function getTodayWorkoutPreview() {
+  const day = new Date().getDay(); // 0=Sun, 1=Mon
+  const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  const name = dayNames[day];
+  const el = document.getElementById('today-workout-preview');
+  if (name === 'monday') {
+    el.innerHTML = `<div style="color:var(--muted);font-size:0.9rem;padding:1rem 0">🔒 Gym Closed — Rest Day. Go for a long walk, hit 10K steps, recover strong.</div>`;
+    return;
+  }
+  const data = WORKOUT_DATA[name];
+  if (!data) return;
+  el.innerHTML = `
+    <div style="margin-bottom:0.8rem">
+      <span style="font-size:1.4rem">${data.emoji}</span>
+      <strong style="margin-left:0.5rem">${data.name}</strong>
+      <div style="font-size:0.78rem;color:var(--muted);margin-top:0.2rem">${data.exercises.length} exercises · 60 min</div>
+    </div>
+    ${data.exercises.slice(0, 4).map(ex => `
+      <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid var(--border);font-size:0.82rem">
+        <span>${ex.name}</span>
+        <span style="color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:0.75rem">${ex.sets}</span>
+      </div>
+    `).join('')}
+    <div style="font-size:0.78rem;color:var(--muted);margin-top:0.6rem">+${data.exercises.length - 4} more...</div>
+    <button class="btn btn-sm" style="margin-top:0.8rem" onclick="showPage('workout');event.stopPropagation()">View Full Workout →</button>
+  `;
+}
+
+// ═══════════════ CALORIE RING ═══════════════
+function updateCalRing(cals) {
+  const pct = Math.min(cals / 1300, 1);
+  const circ = 238.76;
+  const offset = circ - (pct * circ);
+  document.getElementById('cal-ring').setAttribute('stroke-dashoffset', offset);
+  document.getElementById('cal-consumed').textContent = cals;
+  if (cals > 1300) document.getElementById('cal-ring').setAttribute('stroke', '#ef4444');
+  else document.getElementById('cal-ring').setAttribute('stroke', 'var(--accent)');
+}
+
+function updateMacroBars(p, c, f) {
+  document.getElementById('p-val').textContent = p;
+  document.getElementById('c-val').textContent = c;
+  document.getElementById('f-val').textContent = f;
+  document.getElementById('p-bar').style.width = Math.min(p/150*100, 100) + '%';
+  document.getElementById('c-bar').style.width = Math.min(c/100*100, 100) + '%';
+  document.getElementById('f-bar').style.width = Math.min(f/33*100, 100) + '%';
+}
+
+// ═══════════════ SAVE TODAY ═══════════════
+function saveToday() {
+  const cals = parseInt(document.getElementById('in-cals').value) || 0;
+  const p = parseInt(document.getElementById('in-protein').value) || 0;
+  const c = parseInt(document.getElementById('in-carbs').value) || 0;
+  const f = parseInt(document.getElementById('in-fat').value) || 0;
+  const steps = parseInt(document.getElementById('in-steps').value) || 0;
+  const water = parseInt(document.getElementById('in-water').value) || 0;
+  const today = new Date().toISOString().split('T')[0];
+  appData.dailyLogs[today] = { cals, p, c, f, steps, water, date: today };
+  if (!appData.completedDays.includes(today)) appData.completedDays.push(today);
+  saveData();
+  updateCalRing(cals);
+  updateMacroBars(p, c, f);
+  renderRecentLog();
+  showToast('Day logged! 🔥');
+}
+
+// ═══════════════ WEIGHT ═══════════════
+function saveWeight() {
+  const w = parseFloat(document.getElementById('in-weight').value);
+  if (!w || w < 50 || w > 300) return;
+  const today = new Date().toISOString().split('T')[0];
+  appData.weights.push({ date: today, weight: w });
+  saveData();
+  renderWeightHistory();
+  updateWeightStats();
+  showToast('Weight logged! 📊');
+}
+
+function renderWeightHistory() {
+  const el = document.getElementById('weight-history');
+  if (!el) return;
+  if (!appData.weights.length) { el.innerHTML = '<div style="color:var(--muted);font-size:0.83rem;padding:0.5rem">No entries yet. Log your first weight!</div>'; return; }
+  el.innerHTML = [...appData.weights].reverse().slice(0, 10).map((w, i, arr) => {
+    const prev = arr[i + 1];
+    let delta = '';
+    if (prev) {
+      const d = (w.weight - prev.weight).toFixed(1);
+      delta = `<span class="weight-delta ${d <= 0 ? 'delta-down' : 'delta-up'}">${d > 0 ? '+' : ''}${d} kg</span>`;
+    }
+    return `<div class="weight-entry">
+      <span style="color:var(--muted)">${w.date}</span>
+      <span class="weight-val">${w.weight} kg</span>
+      ${delta}
+    </div>`;
+  }).join('');
+}
+
+function updateWeightStats() {
+  if (!appData.weights.length) return;
+  const latest = appData.weights[appData.weights.length - 1].weight;
+  const lost = (133 - latest).toFixed(1);
+  const statEl = document.getElementById('stat-current-weight');
+  const lostEl = document.getElementById('stat-lost');
+  if (statEl) statEl.innerHTML = `${latest} <span class="unit">kg</span>`;
+  if (lostEl) lostEl.innerHTML = `${lost} <span class="unit">kg</span>`;
+}
+
+// ═══════════════ RECENT LOG ═══════════════
+function renderRecentLog() {
+  const el = document.getElementById('recent-log');
+  if (!el) return;
+  const entries = Object.values(appData.dailyLogs).sort((a,b) => b.date.localeCompare(a.date)).slice(0, 7);
+  if (!entries.length) { el.innerHTML = '<div>No entries yet. Start logging!</div>'; return; }
+  el.innerHTML = `<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse">
+    <thead><tr style="border-bottom:1px solid var(--border)">
+      <th style="text-align:left;padding:0.5rem;color:var(--muted)">Date</th>
+      <th style="padding:0.5rem;color:var(--muted)">Cals</th>
+      <th style="padding:0.5rem;color:var(--muted)">Protein</th>
+      <th style="padding:0.5rem;color:var(--muted)">Carbs</th>
+      <th style="padding:0.5rem;color:var(--muted)">Fat</th>
+      <th style="padding:0.5rem;color:var(--muted)">Steps</th>
+      <th style="padding:0.5rem;color:var(--muted)">Water</th>
+    </tr></thead>
+    <tbody>${entries.map(e => `
+      <tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:0.5rem;font-family:'JetBrains Mono',monospace;font-size:0.78rem">${e.date}</td>
+        <td style="padding:0.5rem;text-align:center;color:${e.cals > 1300 ? '#ef4444' : 'var(--green)'};font-family:'JetBrains Mono',monospace">${e.cals}</td>
+        <td style="padding:0.5rem;text-align:center;color:var(--muted);font-family:'JetBrains Mono',monospace">${e.p}g</td>
+        <td style="padding:0.5rem;text-align:center;color:var(--muted);font-family:'JetBrains Mono',monospace">${e.c}g</td>
+        <td style="padding:0.5rem;text-align:center;color:var(--muted);font-family:'JetBrains Mono',monospace">${e.f}g</td>
+        <td style="padding:0.5rem;text-align:center;color:${e.steps >= 10000 ? 'var(--green)' : 'var(--muted)'};font-family:'JetBrains Mono',monospace">${e.steps?.toLocaleString() || '-'}</td>
+        <td style="padding:0.5rem;text-align:center;color:var(--muted);font-family:'JetBrains Mono',monospace">${e.water ? e.water+'🥤' : '-'}</td>
+      </tr>
+    `).join('')}</tbody>
+  </table></div>`;
+}
+
+// ═══════════════ CALENDAR ═══════════════
+function buildCalendar() {
+  const grid = document.getElementById('calendar-grid');
+  if (!grid) return;
+  const start = new Date(appData.startDate);
+  const today = new Date();
+  let html = '';
+  for (let i = 0; i < 90; i++) {
+    const d = new Date(start);
+    d.setDate(start.getDate() + i);
+    const dateStr = d.toISOString().split('T')[0];
+    const isSun = d.getDay() === 1; // Monday = day 1 = rest/closed
+    const isPast = d < today;
+    const isToday = dateStr === today.toISOString().split('T')[0];
+    const isDone = appData.completedDays.includes(dateStr);
+    let cls = isSun ? 'rest' : (isDone ? 'done' : isPast ? 'workout' : 'workout future');
+    if (isToday) cls += ' today';
+    const label = i + 1;
+    html += `<div class="cal-day ${cls}" title="Day ${label} — ${d.toDateString()}">${label}</div>`;
+  }
+  grid.innerHTML = html;
+}
+
+// ═══════════════ SCHEDULE TABLE ═══════════════
+function buildScheduleTable() {
+  const el = document.getElementById('schedule-table');
+  if (!el) return;
+  el.innerHTML = SCHEDULE.map(s => `
+    <tr style="border-bottom:1px solid var(--border)">
+      <td style="padding:0.7rem;font-weight:600">${s.day}</td>
+      <td style="padding:0.7rem;color:var(--accent)">${s.gym}</td>
+      <td style="padding:0.7rem;font-family:'JetBrains Mono',monospace">${s.cals} kcal</td>
+      <td style="padding:0.7rem;color:var(--muted)">${s.cardio}</td>
+      <td style="padding:0.7rem;color:var(--muted)">${s.notes}</td>
+    </tr>
+  `).join('');
+}
+
+// ═══════════════ DASHBOARD INIT ═══════════════
+function initDashboard() {
+  const day = getDayNumber();
+  const pct = Math.round((day / 90) * 100);
+  document.getElementById('current-day-num').textContent = day;
+  document.getElementById('progress-label-left').textContent = `Day ${day} of 90`;
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+  getTodayWorkoutPreview();
+  updateWeightStats();
+
+  const today = new Date().toISOString().split('T')[0];
+  const todayLog = appData.dailyLogs[today];
+  if (todayLog) {
+    updateCalRing(todayLog.cals);
+    updateMacroBars(todayLog.p, todayLog.c, todayLog.f);
+  }
+}
+
+// ═══════════════ TOAST ═══════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ═══════════════ BOOT ═══════════════
+initDashboard();
+buildScheduleTable();
+renderRecentLog();
+showWorkout('tuesday');
+
+// ═══════════════ PWA SERVICE WORKER ═══════════════
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('SW registered:', reg.scope))
+      .catch(err => console.log('SW failed:', err));
+  });
+}
+
+// ═══════════════ INSTALL BANNER ═══════════════
+let deferredPrompt;
+const installBanner = document.getElementById('install-banner');
+const installBtn = document.getElementById('install-btn');
+const dismissBtn = document.getElementById('dismiss-install');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBanner.style.display = 'flex';
+});
+
+installBtn?.addEventListener('click', async () => {
+  installBanner.style.display = 'none';
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+  }
+});
+
+dismissBtn?.addEventListener('click', () => {
+  installBanner.style.display = 'none';
+});
+
+window.addEventListener('appinstalled', () => {
+  installBanner.style.display = 'none';
+  showToast('App installed! 🎉');
+});
+</script>
+</body>
+</html>
